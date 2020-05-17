@@ -394,7 +394,7 @@ def generate_ranking_plot(dff_rank, race_select):
                 name=race_dict[group_select],
                 showlegend = True,
                 text=np.repeat(race_dict[group_select],len(df_plot)),
-                hovertemplate = "%{text}: %{y:.0f}km <br>" + "<extra></extra>",
+                hovertemplate = "%{text}: %{y:.1f}km <br>" + "<extra></extra>",
                 hoverlabel = dict(font_size=20),
                 )
         data.append(new_trace)

@@ -250,7 +250,7 @@ def generate_map(amenity, dff_dist, dff_dest, x_range=None):
             font=dict(color="white"),
             x=0,
             y=0,
-            yanchor="bottom",
+            yanchor="top",
         ),
     )
 
@@ -276,17 +276,33 @@ def generate_map(amenity, dff_dist, dff_dest, x_range=None):
     ))
 
     # scatterplot of the amenity locations
-    point_color = [colormap[amenity] if i==True else 'black' for i in dff_dest['operational']]
+    dest_open = dff_dest[dff_dest['operational']==True]
+    dest_closed = dff_dest[dff_dest['operational']==False]
 
-    data.append(go.Scattermapbox(
-        lat=dff_dest["lat"],
-        lon=dff_dest["lon"],
-        mode="markers",
-        marker={"color": point_color, "size": 9},
-        # marker={"color": dff_dest['operational'], "size": 9},
-        name=amenity_names[amenity],
-        hoverinfo="skip", hovertemplate="",
-    ))
+    if len(dest_open) > 0:
+        data.append(go.Scattermapbox(
+            lat=dest_open["lat"],
+            lon=dest_open["lon"],
+            mode="markers",
+            marker={"color": [colormap[amenity]]*len(dest_open), "size": 9},
+            # marker={"color": dff_dest['operational'], "size": 9},
+            name=amenity_names[amenity],
+            hoverinfo="skip", hovertemplate="",
+        ))
+
+    if len(dest_closed) > 0:
+        data.append(go.Scattermapbox(
+            lat=dest_closed["lat"],
+            lon=dest_closed["lon"],
+            mode="markers",
+            marker={"color": ['black']*len(dest_closed), "size": 9},
+            # marker={"color": dff_dest['operational'], "size": 9},
+            name='Closed {}'.format(amenity_names[amenity]),
+            hoverinfo="skip", hovertemplate="",
+        ))
+    # point_color = [colormap[amenity] if i==True else 'black' for i in dff_dest['operational']]
+
+
 
     return {"data": data, "layout": layout}
 

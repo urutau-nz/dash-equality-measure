@@ -56,17 +56,17 @@ def build_graph_title(title):
 def get_menu():
     menu = html.Div(
         [
-            dcc.Link(
+            html.A(
                 "Tom Logan",
                 href="https://tomlogan.co.nz/",
                 className="tab first",
             ),
-            dcc.Link(
+            html.A(
                 "Mitchell Anderson",
                 href="https://linkedin.com/in/man112",
                 className="tab",
             ),
-            dcc.Link(
+            html.A(
                 "Dai Kiddle",
                 href="http://linkedin.com/in/dai-kiddle",
                 className="tab",
