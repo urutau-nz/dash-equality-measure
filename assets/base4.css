@@ -28,5 +28,10 @@ body {
 }
 
 #ecdf *, #recovery *, #food_ecdf *, #food_ranking * {
-        font-size: 1rem;
-    }
+  font-size: 1rem;
+}
+
+.my_list li {
+  list-style:inside;
+  color:black;
+}

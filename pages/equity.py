@@ -110,7 +110,7 @@ def create_layout(app):
                                     * it can be used in lieu of the average value (so no changes to the analysis process are required)
                                     * it is an absolute (as opposed to relative) measure, which is necessary in planning.
                                     '''],
-                                    style={'list-style':'inside','color':'black'}
+                                    className="my_list"
                                     ),
                                     html.H6(
                                         ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
