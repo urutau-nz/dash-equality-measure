@@ -28,6 +28,10 @@ def create_layout(app):
                                         href="./resilience",
                                     ),
                                     html.A(
+                                        html.Button("Measuring Equity", id="learn-more-button", className="current-button"),
+                                        # href="./resilience",
+                                    ),
+                                    html.A(
                                         html.Button("Recover", id="learn-more-button"),
                                         href="./soon",
                                     ),
@@ -105,10 +109,11 @@ def create_layout(app):
                                     this is the value that would, if everyone had that same value, provide the same level of welfare as the existing distribution.
                                     That is, it measures the distribution and penalizes for inequality.
 
-                                    The Kolm-Pollak EDE measure is better suited for urban planning application compared to the Gini or Atkinson because
+                                    The Kolm-Pollak EDE measure is well suited for urban planning application compared to the Gini or Atkinson because
                                     * it can be used for distributions of both desirable and undesirable quantities (e.g., income or exposure respectively)
                                     * it can be used in lieu of the average value (so no changes to the analysis process are required)
-                                    * it is an absolute (as opposed to relative) measure, which is necessary in planning.
+                                    * it is an absolute (as opposed to relative) measure, which is necessary in planning
+                                    * it enables subgroup comparisons for equity analysis.
                                     '''],
                                     className="my_list"
                                     ),
@@ -372,7 +377,7 @@ def generate_ranking_plot(dff_rank, race_select):
             ),
         yaxis=dict(
             title="EDE: distance (km)".upper(),
-            # range=(0,100),
+            range=(0,5),
             fixedrange=True,
             titlefont=dict(size=12)
             ),

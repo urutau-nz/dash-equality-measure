@@ -66,6 +66,10 @@ def create_layout(app):
                             html.Div(
                                 [
                                     html.A(
+                                        html.Button("Overview", id="learn-more-button", className="current-button"),
+                                        # href="./resilience",
+                                    ),
+                                    html.A(
                                         html.Button("Resilience & Access", id="learn-more-button"),
                                         href="./resilience",
                                     ),

@@ -334,6 +334,10 @@ def create_layout(app):
                                         href="./overview",
                                     ),
                                     html.A(
+                                        html.Button("Resilience & Access", id="learn-more-button", className="current-button"),
+                                        # href="./resilience",
+                                    ),
+                                    html.A(
                                         html.Button("Measuring Equity", id="learn-more-button"),
                                         href="./equity",
                                     ),
@@ -386,7 +390,9 @@ def create_layout(app):
                                     html.P(
                                         ["\
                                     In addition to water, power, sanitation, and communications, communities require\
-                                    access to everyday amenities including food, education, health care, and culture (Winter, 1997)."
+                                    access to everyday amenities including food, education, health care, and culture (Winter, 1997).\
+                                    While access includes dimensions of availability, acceptability, afforability, adequacy, and awareness (Penchasky 1981; Saurman 2016),\
+                                    we begin by considering proximity."
                                     ],
                                     ),
                                     html.H6(
