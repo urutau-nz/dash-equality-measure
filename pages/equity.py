@@ -7,6 +7,8 @@ from utils import Header, make_dash_table
 import pandas as pd
 import numpy as np
 
+
+
 def create_layout(app):
     return html.Div(
         [
@@ -290,13 +292,6 @@ def create_layout(app):
         ],
         className="page",
     )
-
-{'label': 'All', 'value': 'H7X001'},
-{'label': 'White', 'value': 'H7X002'},
-{'label': 'Black', 'value': 'H7X003'},
-{'label': 'Am. Indian', 'value': 'H7X004'},
-{'label': 'Asian', 'value': 'H7X005'},
-{'label': 'Latino/Hispanic', 'value': 'H7Y003'},
 
 race_dict = {'H7X001':'All', 'H7X002': 'White', 'H7X003':'Black', 'H7X004':'Am. Indian', 'H7X005':'Asian', 'H7Y003':'Hispanic'}
 

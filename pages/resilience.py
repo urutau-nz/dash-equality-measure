@@ -24,7 +24,7 @@ df_dist['distance'] = df_dist['distance'].replace(np.inf, 999)
 
 destinations = pd.read_csv('./data/destinations.csv')
 
-df_recovery = pd.read_csv('./data/recovery.csv')
+df_recovery = pd.read_csv('./data/recovery_nc.csv')
 
 # days since land landfall
 days = np.unique(df_recovery['day'])
