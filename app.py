@@ -74,7 +74,7 @@ df_dist['distance'] = df_dist['distance'].replace(np.inf, 999)
 
 destinations = pd.read_csv('./data/destinations.csv')
 
-df_recovery = pd.read_csv('./data/recovery.csv')
+df_recovery = pd.read_csv('./data/recovery_nc.csv')
 
 
 
@@ -222,12 +222,19 @@ def update_ecdf(
     return equity.generate_ranking_plot(dff_rank, race_select)
 
 
+#####
+# recovery
+#####
+# Load data
+df_dist = pd.read_csv('./data/recover_md_map.csv',dtype={"geoid10": str})
+df_dist['raw_distance'] = df_dist['raw_distance']/1000
+df_dist['raw_distance'] = df_dist['raw_distance'].replace(np.inf, 999)
+df_dist['change_distance'] = df_dist['change_distance']/1000
+df_dist['change_distance'] = df_dist['change_distance'].replace(np.inf, 999)
 
+# destinations = pd.read_csv('./data/destinations.csv')
 
-
-
-
-
+df_recovery = pd.read_csv('./data/recovery_md.csv')
 
 
 
@@ -237,5 +244,5 @@ def update_ecdf(
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    app.run_server(port=9006)
+    app.run_server(debug=True, port=9006)
+    # app.run_server(port=9006)

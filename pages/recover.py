@@ -134,9 +134,10 @@ def create_layout(app):
                                 id="map-container",
                                 children=[
                                     html.H6("Select a distance range to identify those areas"),
-                                    dcc.Graph(id="map",
-                                    figure = generate_map(df_dist),
-                                    config={"scrollZoom": True, "displayModeBar": True,
+                                    dcc.Graph(
+                                        id="map",
+                                        figure = generate_map(df_dist),
+                                        config={"scrollZoom": True, "displayModeBar": True,
                                             "modeBarButtonsToRemove":['toggleSpikelines','hoverCompareCartesian',
                                             'pan',"zoomIn2d", "zoomOut2d","lasso2d","select2d"],
                                     },
@@ -146,7 +147,7 @@ def create_layout(app):
                             ),
                             html.Div(
                                 [
-                                    html.H6("Resilience curve"),
+                                    html.H6("Change in access"),
                                     dcc.Graph(
                                         id="map",
                                         figure=generate_map_change(df_dist),
