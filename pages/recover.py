@@ -421,7 +421,7 @@ def generate_map(dff_dist, change=False):
         legend=dict(
             # bgcolor="#1f2c56",
             orientation="h",
-            font=dict(color="white"),
+            font=dict(color="black"),
             x=0,
             y=0,
             yanchor="top",
