@@ -35,11 +35,11 @@ def create_layout(app):
                                     ),
                                     html.A(
                                         html.Button("Recover", id="learn-more-button"),
-                                        href="./soon",
+                                        href="./recover",
                                     ),
                                     html.A(
                                         html.Button("Transformation", id="learn-more-button"),
-                                        href="./soon",
+                                        href="./transform",
                                     ),
                                 ],
                                 className="twelve columns",

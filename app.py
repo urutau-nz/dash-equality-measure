@@ -225,17 +225,31 @@ def update_ecdf(
 #####
 # recovery
 #####
-# Load data
-df_dist = pd.read_csv('./data/recover_md_map.csv',dtype={"geoid10": str})
-df_dist['raw_distance'] = df_dist['raw_distance']/1000
-df_dist['raw_distance'] = df_dist['raw_distance'].replace(np.inf, 999)
-df_dist['change_distance'] = df_dist['change_distance']/1000
-df_dist['change_distance'] = df_dist['change_distance'].replace(np.inf, 999)
-
-# destinations = pd.read_csv('./data/destinations.csv')
-
 df_recovery = pd.read_csv('./data/recovery_md.csv')
+# Update recovery
+@app.callback(
+    Output("recovery-md", "figure"),
+    [
+        Input("simulation-select", "value"),
+        Input("metric-select", "value"),
+        Input("group-select", "value"),
+    ],
+)
+def update_ecdf(
+    sim_ids, metrics, groups
+    ):
+    sim_ids = [int(i)-1 for i in sim_ids]
+    access_metrics=['{}_{}'.format(x,y) for x in metrics for y in groups]
+    recovery_metrics=[1,2,6]
 
+    # subset
+    dff_recovery = df_recovery[
+                    (df_recovery.sim_id.isin(sim_ids)) &
+                    (df_recovery.recovery_metric.isin(recovery_metrics)) &
+                    (df_recovery.access_metric.isin(access_metrics))
+                    ]
+
+    return recover.plot_recovery(dff_recovery)
 
 
 
@@ -244,5 +258,5 @@ df_recovery = pd.read_csv('./data/recovery_md.csv')
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=9006)
-    # app.run_server(port=9006)
+    # app.run_server(debug=True)
+    app.run_server(port=9006)

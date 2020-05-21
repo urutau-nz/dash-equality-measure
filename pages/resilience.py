@@ -134,7 +134,6 @@ def generate_ecdf_plot(amenity_select, dff_dist, x_range=None):
     return {"data": data, "layout": layout}
 
 
-
 def recovery_plot(amenity_select, dff_recovery, day):
     """
     :param amenity_select: the amenity of interest.
@@ -213,7 +212,6 @@ def recovery_plot(amenity_select, dff_recovery, day):
     data.append(new_trace)
 
     return {"data": data, "layout": layout}
-
 
 
 def generate_map(amenity, dff_dist, dff_dest, x_range=None):
@@ -307,15 +305,6 @@ def generate_map(amenity, dff_dist, dff_dest, x_range=None):
     return {"data": data, "layout": layout}
 
 
-
-
-
-
-
-
-
-
-
 def create_layout(app):
     # Page layouts
     return html.Div(
@@ -343,11 +332,11 @@ def create_layout(app):
                                     ),
                                     html.A(
                                         html.Button("Recover", id="learn-more-button"),
-                                        href="./soon",
+                                        href="./recover",
                                     ),
                                     html.A(
                                         html.Button("Transformation", id="learn-more-button"),
-                                        href="./soon",
+                                        href="./transform",
                                     ),
                                 ],
                                 className="twelve columns",

@@ -1,95 +1,140 @@
+import dash_core_components as dcc
 import dash_html_components as html
+import plotly.graph_objs as go
+import plotly.express as px
+
 from utils import Header, make_dash_table
 import pandas as pd
-import pathlib
-
-# get relative data folder
-PATH = pathlib.Path(__file__).parent
-DATA_PATH = PATH.joinpath("../data").resolve()
-
-df_dividend = pd.read_csv(DATA_PATH.joinpath("df_dividend.csv"))
-df_realized = pd.read_csv(DATA_PATH.joinpath("df_realized.csv"))
-df_unrealized = pd.read_csv(DATA_PATH.joinpath("df_unrealized.csv"))
-
+import numpy as np
 
 def create_layout(app):
     return html.Div(
         [
             Header(app),
-            # page 5
+            # page 3
             html.Div(
                 [
-                    # Row 1
+                    # Buttons
                     html.Div(
                         [
                             html.Div(
                                 [
-                                    html.H6(
-                                        ["Distributions"], className="subtitle padded"
+                                    html.A(
+                                        html.Button("Overview", id="learn-more-button"),
+                                        href="./overview",
                                     ),
-                                    html.P(
-                                        [
-                                            "Distributions for this fund are scheduled quaterly"
-                                        ],
-                                        style={"color": "#7a7a7a"},
+                                    html.A(
+                                        html.Button("Resilience & Access", id="learn-more-button"),
+                                        href="./resilience",
+                                    ),
+                                    html.A(
+                                        html.Button("Measuring Equity", id="learn-more-button"),
+                                        href="./equity",
+                                    ),
+                                    html.A(
+                                        html.Button("Recover", id="learn-more-button"),
+                                        href="./recover",
+                                    ),
+                                    html.A(
+                                        html.Button("Transformation", id="learn-more-button", className="current-button"),
+                                        # href="./transform",
                                     ),
                                 ],
                                 className="twelve columns",
-                            )
+                            ),
                         ],
-                        className="row ",
+                        className="row buttons",
+                        style={"margin-bottom": "35px"},
                     ),
-                    # Row 2
+                    # Title
                     html.Div(
                         [
                             html.Div(
                                 [
-                                    html.Br([]),
-                                    html.H6(
-                                        ["Dividend and capital gains distributions"],
-                                        className="subtitle tiny-header padded",
+                                    html.H5("Transformation and preparation"),
+                                ],
+                                className="product",
+                            )
+                        ],
+                        className="row",
+                    ),
+                    # Row
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    dcc.Markdown(
+                                        ['''
+                                    Key to resilience is the notion of "desired functionality" and the capacity to adapt or transform.
+                                    Given that aspects of resilience rely on community characteristics, approaches that enhance community
+                                    cohesion, social capital, and community sustainability all will contribute to a community's resilience.
+
+                                    We identify three ways for transforming communities:
+                                    '''],
                                     ),
-                                    html.Div(
-                                        [
-                                            html.Table(
-                                                make_dash_table(df_dividend),
-                                                className="tiny-header",
-                                            )
-                                        ],
-                                        style={"overflow-x": "auto"},
+                                    html.H6(
+                                        ["Improving the 'normal' conditions"], className="subtitle padded"
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    Measuring access and the EDE enables decision-makers to evaluate areas
+                                    of need. We can also use this to optimize facility/service locations, based on
+                                    need, to improve people's access to resources and opportunities.
+                                    Providing equitable access to opportunities has been identified as an important
+                                    condition of community sustainability (Dempsey 2011).
+                                    '''],
+                                    ),
+                                    html.H6(
+                                        ["Preparation"], className="subtitle padded"
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    Building immediately on from the recovery discussion: we can use this data-driven planning
+                                    approach to simulate failures and either strengthen existing facilities or build redunancy.
+                                    Using simulation enables us to explore scenarios, and discuss and plan how we can respond.
+                                    '''],
+                                    ),
+                                    html.H6(
+                                        ["Transforming communities"], className="subtitle padded"
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    Ultimately, with the changing environment we need to begun to rethink the spatial
+                                    arrangement of our communities.
+                                    We are working on integrating these approaches with hazard maps so to form a robust
+                                    approach to guiding locations of not just amenities, but further development and densification.
+                                    '''],
                                     ),
                                 ],
                                 className="twelve columns",
-                            )
+                            ),
                         ],
                         className="row ",
                     ),
-                    # Row 3
+                    # concluding thoughts
                     html.Div(
                         [
                             html.Div(
                                 [
                                     html.H6(
-                                        ["Realized/unrealized gains as of 01/31/2018"],
-                                        className="subtitle tiny-header padded",
-                                    )
+                                        ["Concluding thoughts"],
+                                        className="subtitle padded",
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    Much of this work is ongoing, and I am keen to discuss this at the AScUS unconference.
+
+                                    Especially with the significant investment slated for kick-starting economic recovery,
+                                    now is an important time to ensure that our investment not only improves resiliences,
+                                    but ensures it is equitable. Where suitable and appropriate, we should use data to
+                                    inform these decisions.
+
+                                    I look forward to talking with you all.                                
+                                    '''],
+                                    ),
                                 ],
                                 className=" twelve columns",
                             )
-                        ],
-                        className="row ",
-                    ),
-                    # Row 4
-                    html.Div(
-                        [
-                            html.Div(
-                                [html.Table(make_dash_table(df_realized))],
-                                className="six columns",
-                            ),
-                            html.Div(
-                                [html.Table(make_dash_table(df_unrealized))],
-                                className="six columns",
-                            ),
                         ],
                         className="row ",
                     ),

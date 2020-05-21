@@ -14,11 +14,14 @@ amenities = ['supermarket','gas_station']
 amenity_names = {'supermarket':'Supermarket','gas_station':'Service Station'}
 
 # Load data
-df_dist = pd.read_csv('./data/recover_md_map.csv',dtype={"geoid10": str})
+df_dist = pd.read_csv('./data/recover_md_map_8.csv',dtype={"geoid10": str})
 df_dist['raw_distance'] = df_dist['raw_distance']/1000
 df_dist['raw_distance'] = df_dist['raw_distance'].replace(np.inf, 999)
 df_dist['change_distance'] = df_dist['change_distance']/1000
 df_dist['change_distance'] = df_dist['change_distance'].replace(np.inf, 999)
+
+# load destinations
+df_dest = pd.read_csv('./data/dest_outages_md_8.csv')
 
 def create_layout(app):
     return html.Div(
@@ -46,11 +49,11 @@ def create_layout(app):
                                     ),
                                     html.A(
                                         html.Button("Recover", id="learn-more-button", className="current-button"),
-                                        # href="./soon",
+                                        # href="./recover",
                                     ),
                                     html.A(
                                         html.Button("Transformation", id="learn-more-button"),
-                                        href="./soon",
+                                        href="./transform",
                                     ),
                                 ],
                                 className="twelve columns",
@@ -119,6 +122,8 @@ def create_layout(app):
                                     What you see is that in many cases, the areas with the largest change in - who would be
                                     and often are prioritized in recovery efforts - in fact still have better access at their
                                     worst point, than other areas have on a normal day.
+                                    This is even worse if we were to use percentage change, which is sometimes used and appropriate in cases
+                                    of economic loss.
                                     '''],
                                     ),
                                 ],
@@ -133,7 +138,7 @@ def create_layout(app):
                             html.Div(
                                 id="map-container",
                                 children=[
-                                    html.H6("Select a distance range to identify those areas"),
+                                    html.H6("Disruption: Actual distance"),
                                     dcc.Graph(
                                         id="map",
                                         figure = generate_map(df_dist),
@@ -147,10 +152,10 @@ def create_layout(app):
                             ),
                             html.Div(
                                 [
-                                    html.H6("Change in access"),
+                                    html.H6("Disruption: Change in distance"),
                                     dcc.Graph(
                                         id="map",
-                                        figure=generate_map_change(df_dist),
+                                        figure=generate_map(df_dist, change=True),
                                         config={"scrollZoom": True, "displayModeBar": True,
                                             "modeBarButtonsToRemove":['toggleSpikelines','hoverCompareCartesian'],
                                     },
@@ -166,6 +171,9 @@ def create_layout(app):
                         [
                             html.Div(
                                 [
+                                    html.H6(
+                                        ["Guiding recovery"], className="subtitle padded"
+                                    ),
                                     dcc.Markdown(
                                         ['''
                                     In a similar fashion, if we focus on the average distance when we optimize our recovery,
@@ -173,33 +181,13 @@ def create_layout(app):
                                     For example, when considering the mean/average, the average distance improves the same amount if
                                     we improve one person's proximity from 1km to 0.5km as it would by increasing someone from
                                     3km to 2.5km.
-                                    '''],
-                                    ),
-                                    html.H6(
-                                        ["Recovery"], className="subtitle padded"
-                                    ),
-                                    dcc.Markdown(
-                                        ['''
-                                    We simulate disruptive events in a city and model the recovery.
-                                    We present three approaches to the recovery: 1) randomly opening the grocery stores; 2) optimize reopening
-                                    in a manner than increases the average distance; 3) optimize the reopening to improve the EDE.
-                                    '''],
-                                    ),
-                                    html.H6(
-                                        ["What we measure matters!"], className="subtitle padded"
-                                    ),
-                                    dcc.Markdown(
-                                        ['''
-                                    Manner resilience quantifications assess the change in functionality
-                                    and endeavour to return to "normal" (0).
-                                    However, consider the following map. On the lefthandside we present the
-                                    distance to nearest grocery store in a city immediately following a disruption
-                                    and on the righthandside we show the *change in* distance to nearest grocery store.
 
-                                    What you see is that in many cases, the areas with the largest change in - who would be
-                                    and often are prioritized in recovery efforts - in fact still have better access at their
-                                    worst point, than other areas have on a normal day.
+                                    An EDE (as it is based on a welfare function - see Atkinson (1970) for details) prioritizes
+                                    interventions that support the worse-off.
+
+                                    Here we demonstrate the recovery following several simulated disruptions.
                                     '''],
+                                    className="my_list"
                                     ),
                                 ],
                                 className="twelve columns",
@@ -211,44 +199,53 @@ def create_layout(app):
                     html.Div(
                         [
                             html.H6(
-                                ["Example: Ranking with the EDE"], className="subtitle padded"
+                                ["Recovery after a disruption"], className="subtitle padded"
                             ),
                             html.Div(
                                     id="ecdf-container",
                                     children=[
                                         html.H6("Ranking cities based on access to grocery stores"),
-                                        dcc.Graph(id="food_ranking",
+                                        dcc.Graph(id="recovery-md",
                                         config={"scrollZoom": True, "displayModeBar": True,
                                                 "modeBarButtonsToRemove":['toggleSpikelines','hoverCompareCartesian',
                                                 'pan',"zoomIn2d", "zoomOut2d","lasso2d","select2d"],
                                                 },
                                             ),
-                                        html.H6("Select the demographic groups"),
+                                        html.H6("Select the simulation"),
                                         dcc.Checklist(
-                                            id="race-select-2",
+                                            id="simulation-select",
                                             options=[
-                                                {'label': 'All', 'value': 'H7X001'},
-                                                {'label': 'White', 'value': 'H7X002'},
-                                                {'label': 'Black', 'value': 'H7X003'},
-                                                {'label': 'Am. Indian', 'value': 'H7X004'},
-                                                {'label': 'Asian', 'value': 'H7X005'},
-                                                {'label': 'Latino/Hispanic', 'value': 'H7Y003'},
+                                                {'label': '1', 'value': '1'},
+                                                {'label': '2', 'value': '2'},
+                                                {'label': '3', 'value': '3'},
+                                                {'label': '4', 'value': '4'},
+                                                {'label': '5', 'value': '5'},
                                             ],
-                                            value=['H7X001','H7X002','H7X003'],
+                                            value=['1','2','3'],
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
-                                        html.H6("Order by"),
-                                        dcc.RadioItems(
-                                            id="race-order",
+                                        html.H6("Select the metric"),
+                                        dcc.Checklist(
+                                            id="metric-select",
                                             options=[
-                                                {'label': 'All', 'value': 'H7X001'},
-                                                {'label': 'White', 'value': 'H7X002'},
-                                                {'label': 'Black', 'value': 'H7X003'},
-                                                {'label': 'Am. Indian', 'value': 'H7X004'},
-                                                {'label': 'Asian', 'value': 'H7X005'},
-                                                {'label': 'Latino/Hispanic', 'value': 'H7Y003'},
+                                                {'label': 'Average', 'value': 'mean'},
+                                                {'label': 'Equally-distributed equivalent', 'value': 'ede'},
                                             ],
-                                            value='H7X001',
+                                            value=['ede'],
+                                            labelStyle={'display': 'inline-block', 'font-weight':400}
+                                        ),
+                                        html.H6("Select the group"),
+                                        dcc.Checklist(
+                                            id="group-select",
+                                            options=[
+                                                {'label': 'Everyone', 'value': 'all'},
+                                                {'label': 'The 1st quintile (the 20% of residents who normally have the best access)', 'value': 'quin1'},
+                                                {'label': 'The 2nd quintile', 'value': 'quin2'},
+                                                {'label': 'The 3rd quintile', 'value': 'quin3'},
+                                                {'label': 'The 4th quintile', 'value': 'quin4'},
+                                                {'label': 'The 5th quintile (worst-access)', 'value': 'quin5'},
+                                            ],
+                                            value=['quin1','quin5'],
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
                                     ],
@@ -257,7 +254,83 @@ def create_layout(app):
                         ],
                         className="row ",
                     ),
+                    # Row
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.H6(
+                                        ["Thoughts"], className="subtitle padded"
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    A couple of things to note:
+                                    * guided recovery (the optimized ones) is significantly better than random recovery
+                                    * people with good access (in these simulations) seldom have worse access than the people with the worse access usually have
+                                    * when we optimize for the average, we see faster recovery for the quintiles that are better off than if we optimize for the EDE
+
+                                    Fundamentally, however, we still confront the issue that recovery (optimized or not)
+                                    is returning to the previous state and that is inequitable in many cities.
+                                    The benefit of presenting resilience that shows the true access (rather than the change in)
+                                    is that we are in an undesirable state and this is highlighted more by the use of
+                                    the EDE. The EDE means that decision-makers cannot be complacent by thinking the
+                                    state of the average person is OK.
+
+                                    Nevertheless, if we are true to the wider themes of resilience, which
+                                    often includes transformation, we need to consider how we can transform
+                                    these communities.
+                                    '''],
+                                    className="my_list"
+                                    ),
+                                ],
+                                className="twelve columns",
+                            ),
+                        ],
+                        className="row ",
+                    ),
                     # Row 5
+                    html.Div(
+                        [
+                            # html.Img(
+                            #     src=app.get_asset_url("dash-financial-logo.png"),
+                            #     className="logo",
+                            # ),
+                            html.A(
+                                html.Button("Transformation", id="learn-more-button"),
+                                href="./transform",
+                            ),
+                        ],
+                        className="row",
+                        style={"text-align": "right"},
+                    ),
+                    # Row
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.H6(
+                                        ["Limitations and opportunities to implement"], className="subtitle padded"
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    The demographic data is based on census data. However, during an emergency people
+                                    will evacuate or otherwise relocate. However, in implementation, this approach can rely
+                                    data based on the knowledge of emergency managers or other information. Additionally, it
+                                    can be supplemented with cellphone data.
+
+                                    Additionally, we rely on Twitter data and other internet feeds for information on
+                                    service closures, however it would be feasible to create a online means for essential services
+                                    to update their status and infrastructure dependencies (e.g., a store may be undamaged but have
+                                    no power) and this can guide recovery efforts.
+                                    '''],
+                                    className="my_list"
+                                    ),
+                                ],
+                                className="twelve columns",
+                            ),
+                        ],
+                        className="row ",
+                    ),
                     html.Div(
                         [
                             html.Div(
@@ -267,18 +340,14 @@ def create_layout(app):
                                         className="subtitle padded",
                                     ),
                                     html.P(
-                                        ["We are still working on this paper, but\
+                                        ["We are still working on this project, but\
                                         feel free to contact us if you have questions."
                                         ]),
                                     html.P(
-                                        ["Logan, T. M., Anderson, M. J., Williams, T., & Conrow, L. (In Progress). Measuring inequality in the built environment: Evaluating grocery store accessfor planning policy and intervention."],
-                                        style={'padding-left': '22px', 'text-indent': '-22px', 'font-weight':400}
+                                        ["More information on equally-distributed equivalents:"]
                                         ),
                                     html.P(
-                                        ["Information on the inequality measure can also be found here:"]
-                                        ),
-                                    html.P(
-                                        ["Sheriff, G., & Maguire, K. (2013). Ranking Distributions of Environmental Outcomes Across Population Groups. Working paper, EPA."
+                                        ["Atkinson, A. B. (1970). On the measurement of inequality. Journal of Economic Theory, 2(3), 244–263"
                                         ],
                                         style={'padding-left': '22px', 'text-indent': '-22px', 'font-weight':400}
                                     ),
@@ -316,7 +385,7 @@ pl_deep=[[0.0, 'rgb(253, 253, 204)'],
 
 
 
-def generate_map(dff_dist):
+def generate_map(dff_dist, change=False):
     """
     Generate map showing the distance to services and the locations of them
     :param amenity: the service of interest.
@@ -327,6 +396,12 @@ def generate_map(dff_dist):
     # print(dff_dist['geoid10'].tolist())
     dff_dist = dff_dist.reset_index()
 
+    if change:
+        dist_var = 'change_distance'
+        hover_txt = 'Change in distance'
+    else:
+        dist_var = 'raw_distance'
+        hover_txt = 'Distance'
 
     layout = go.Layout(
         clickmode="none",
@@ -351,59 +426,101 @@ def generate_map(dff_dist):
     data.append(go.Choroplethmapbox(
         geojson = 'https://raw.githubusercontent.com/urutau-nz/dash-evaluating-proximity/master/data/block.geojson',
         locations = dff_dist['geoid'].tolist(),
-        z = dff_dist['raw_distance'].tolist(),
+        z = dff_dist[dist_var].tolist(),
         colorscale = pl_deep,
         colorbar = dict(thickness=20, ticklen=3), zmin=0, zmax=5,
         marker_line_width=0, marker_opacity=0.7,
         visible=True,
-        hovertemplate="Distance: %{z:.2f}km<br>" +
+        text=np.repeat(hover_txt, len(dff_dist)),
+        hovertemplate="%{text}: %{z:.2f}km<br>" +
                         "<extra></extra>",
     ))
+
+
+    # scatterplot of the amenity locations
+    dest_open = df_dest[df_dest['operational']==True]
+    dest_closed = df_dest[df_dest['operational']==False]
+
+    if len(dest_open) > 0:
+        data.append(go.Scattermapbox(
+            lat=dest_open["st_y"],
+            lon=dest_open["st_x"],
+            mode="markers",
+            marker={"color": [colormap[amenity]]*len(dest_open), "size": 9},
+            # marker={"color": dff_dest['operational'], "size": 9},
+            name=amenity_names[amenity],
+            hoverinfo="skip", hovertemplate="",
+        ))
+
+    if len(dest_closed) > 0:
+        data.append(go.Scattermapbox(
+            lat=dest_closed["st_y"],
+            lon=dest_closed["st_x"],
+            mode="markers",
+            marker={"color": ['black']*len(dest_closed), "size": 9},
+            # marker={"color": dff_dest['operational'], "size": 9},
+            name='Closed {}'.format(amenity_names[amenity]),
+            hoverinfo="skip", hovertemplate="",
+        ))
 
     return {"data": data, "layout": layout}
 
-def generate_map_change(dff_dist):
+def plot_recovery(dff_recovery):
     """
-    Generate map showing the distance to services and the locations of them
-    :param amenity: the service of interest.
-    :param dff_dest: the lat and lons of the service.
-    :param x_range: distance range to highlight.
-    :return: Plotly figure object.
+    :return: Figure object
     """
-    # print(dff_dist['geoid10'].tolist())
-    dff_dist = dff_dist.reset_index()
-
-
-    layout = go.Layout(
-        clickmode="none",
-        dragmode="zoom",
-        showlegend=False,
-        autosize=True,
-        hovermode="closest",
-        margin=dict(l=0, r=0, t=0, b=0),
-        mapbox=go.layout.Mapbox(
-            accesstoken=mapbox_access_token,
-            bearing=0,
-            center=go.layout.mapbox.Center(lat = 39.292126, lon = -76.613632),
-            pitch=0,
-            zoom=10.5,
-            style="basic", #"dark", #
-        ),
+    ylimit = dff_recovery.value.max()/1000
+    layout = dict(
+        xaxis=dict(
+            title="time".upper(),
+            zeroline=False,
+            fixedrange=True,
+            titlefont=dict(size=12)
+            ),
+        yaxis=dict(
+            title="Distance (km)".format(amenity_names[amenity]).upper(),
+            zeroline=False,
+            range=(ylimit,0),
+            # autorange='reversed',
+            fixedrange=True,
+            titlefont=dict(size=12)
+            ),
+        font=dict(size=13),
+        showlegend=True,
+        legend_title_text='Optimized for',
+        margin=dict(l=40, r=0, t=10, b=30),
+        # transition = {'duration': 500},
     )
 
-
     data = []
-    # choropleth map showing the distance at the block level
-    data.append(go.Choroplethmapbox(
-        geojson = 'https://raw.githubusercontent.com/urutau-nz/dash-evaluating-proximity/master/data/block.geojson',
-        locations = dff_dist['geoid'].tolist(),
-        z = dff_dist['change_distance'].tolist(),
-        colorscale = pl_deep,
-        colorbar = dict(thickness=20, ticklen=3), zmin=0, zmax=5,
-        marker_line_width=0, marker_opacity=0.7,
-        visible=True,
-        hovertemplate="$\delta$ Distance: %{z:.2f}km<br>" +
-                        "<extra></extra>",
-    ))
+    metric_names = {1:'random',2:'average',6:'EDE'}
+    # Assign color to legend
+    colormap = {1:'#EA5138',2:'#E4AE36',6:'#1F386B'}
+    group_names = {'mean_all': 'Average for everyone', 'ede_all':'EDE for everyone',
+                    'mean_quin1': 'Average for 1st Q', 'ede_quin1':'EDE for 1st Q',
+                    'mean_quin2': 'Average for 2nd Q', 'ede_quin2':'EDE for 2nd Q',
+                    'mean_quin3': 'Average for 3rd Q', 'ede_quin3':'EDE for 3rd Q',
+                    'mean_quin4': 'Average for 4th Q', 'ede_quin4':'EDE for 4th Q',
+                    'mean_quin5': 'Average for 5th Q', 'ede_quin5':'EDE for 5th Q',}
+
+    for recovery_metric in [1,2,6]:
+        j = 0
+        for group in dff_recovery.access_metric.unique():
+            df_plot = dff_recovery.loc[(dff_recovery.recovery_metric==recovery_metric)&(dff_recovery.access_metric==group),].pivot_table(index='time_step',columns='sim_id',values='value')
+            # add the sim
+            for i in list(df_plot):
+                new_trace = go.Scatter(
+                        x=df_plot.index, y=df_plot[i]/1000,
+                        opacity=0.8,
+                        name=metric_names[recovery_metric],
+                        line=dict(color=colormap[recovery_metric],),
+                        text=[group_names[group]]*len(df_plot),
+                        hovertemplate = "%{text}: %{y:.1f}km<br>" + "<extra></extra>",
+                        hoverlabel = dict(font_size=20),
+                        showlegend= j == 0,
+                        )
+                data.append(new_trace)
+                j += 1
+
 
     return {"data": data, "layout": layout}

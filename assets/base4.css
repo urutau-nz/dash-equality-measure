@@ -28,7 +28,7 @@ body {
   height: 30vh;
 }
 
-#ecdf *, #recovery *, #food_ecdf *, #food_ranking * {
+#ecdf *, #recovery *, #food_ecdf *, #food_ranking *, #recovery-md *  {
   font-size: 1rem;
 }
 
@@ -42,5 +42,5 @@ body {
 }
 
 .current-button {
-  background-color: rgba(115, 115, 169, 0.5); 
+  background-color: rgba(115, 115, 169, 0.5);
 }
