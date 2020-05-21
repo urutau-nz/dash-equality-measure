@@ -406,7 +406,7 @@ def generate_map(dff_dist, change=False):
     layout = go.Layout(
         clickmode="none",
         dragmode="zoom",
-        showlegend=not change,
+        showlegend=True,
         autosize=True,
         hovermode="closest",
         margin=dict(l=0, r=0, t=0, b=0),
@@ -419,7 +419,7 @@ def generate_map(dff_dist, change=False):
             style="basic", #"dark", #
         ),
         legend=dict(
-            bgcolor="#1f2c56",
+            # bgcolor="#1f2c56",
             orientation="h",
             font=dict(color="white"),
             x=0,
