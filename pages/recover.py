@@ -418,6 +418,14 @@ def generate_map(dff_dist, change=False):
             zoom=10.5,
             style="basic", #"dark", #
         ),
+        legend=dict(
+            bgcolor="#1f2c56",
+            orientation="h",
+            font=dict(color="white"),
+            x=0,
+            y=0,
+            yanchor="top",
+        ),
     )
 
 
@@ -447,7 +455,6 @@ def generate_map(dff_dist, change=False):
             lon=dest_open["st_x"],
             mode="markers",
             marker={"color": [colormap[amenity]]*len(dest_open), "size": 9},
-            # marker={"color": dff_dest['operational'], "size": 9},
             name=amenity_names[amenity],
             hoverinfo="skip", hovertemplate="",
         ))
@@ -458,7 +465,6 @@ def generate_map(dff_dist, change=False):
             lon=dest_closed["st_x"],
             mode="markers",
             marker={"color": ['black']*len(dest_closed), "size": 9},
-            # marker={"color": dff_dest['operational'], "size": 9},
             name='Closed {}'.format(amenity_names[amenity]),
             hoverinfo="skip", hovertemplate="",
         ))

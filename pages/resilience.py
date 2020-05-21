@@ -283,7 +283,6 @@ def generate_map(amenity, dff_dist, dff_dest, x_range=None):
             lon=dest_open["lon"],
             mode="markers",
             marker={"color": [colormap[amenity]]*len(dest_open), "size": 9},
-            # marker={"color": dff_dest['operational'], "size": 9},
             name=amenity_names[amenity],
             hoverinfo="skip", hovertemplate="",
         ))
@@ -294,7 +293,6 @@ def generate_map(amenity, dff_dist, dff_dest, x_range=None):
             lon=dest_closed["lon"],
             mode="markers",
             marker={"color": ['black']*len(dest_closed), "size": 9},
-            # marker={"color": dff_dest['operational'], "size": 9},
             name='Closed {}'.format(amenity_names[amenity]),
             hoverinfo="skip", hovertemplate="",
         ))
