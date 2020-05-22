@@ -129,7 +129,7 @@ def create_layout(app):
                                     but ensures it is equitable. Where suitable and appropriate, we should use data to
                                     inform these decisions.
 
-                                    I look forward to talking with you all.                                
+                                    I look forward to talking with you all.
                                     '''],
                                     ),
                                 ],

@@ -320,7 +320,7 @@ def generate_ecdf_plot(dff_dist, race_select, cities_select):
         # bargap=0.05,
         showlegend=True,
         margin=dict(l=40, r=0, t=10, b=30),
-        transition = {'duration': 500},
+        # transition = {'duration': 500},
         # legendgroup='city'
         # hovermode ='closest',
         # height= 300
