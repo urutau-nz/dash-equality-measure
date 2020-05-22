@@ -61,6 +61,37 @@ def create_layout(app):
                         className="row",
                     ),
                     # Row 4
+                    html.Div(
+                        [
+                            html.Div(
+                                [
+                                    html.A(
+                                        html.Button("Overview", id="learn-more-button", className="current-button"),
+                                        # href="./resilience",
+                                    ),
+                                    html.A(
+                                        html.Button("Resilience & Access", id="learn-more-button"),
+                                        href="./resilience",
+                                    ),
+                                    html.A(
+                                        html.Button("Measuring Equity", id="learn-more-button"),
+                                        href="./equity",
+                                    ),
+                                    html.A(
+                                        html.Button("Recover", id="learn-more-button"),
+                                        href="./recover",
+                                    ),
+                                    html.A(
+                                        html.Button("Transformation", id="learn-more-button"),
+                                        href="./transform",
+                                    ),
+                                ],
+                                className="twelve columns",
+                            ),
+                        ],
+                        className="row buttons",
+                        style={"margin-bottom": "35px"},
+                    ),
                     # concluding thoughts
                     html.Div(
                         [
@@ -68,10 +99,10 @@ def create_layout(app):
                                 [
                                     dcc.Markdown(
                                         ['''
-                                    This web app is created as my contribution
+                                    This web app is created as our contribution
                                     for the 2020 AScUS
                                     (Actionable Science for Urban Sustainability)
-                                    virtual unconference, hosted 3-5 June 2020.
+                                    virtual unconference, hosted 3-5 June 2020:
                                     https://ascus.metabolismofcities.org/
                                     '''],
                                     ),
