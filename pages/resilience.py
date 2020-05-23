@@ -405,13 +405,6 @@ def create_layout(app):
                                     At these times the focus of resilience shifts from the lens of capacity to that of functionality and impact.
                                     Understanding how people's access has changed can enable emergency managers to quickly restore
                                     the access that was lost and provide temporary access to those in-need.
-
-                                     , neatly ties in the works of the engineering resilience communities,
-                                    who have focused primarily on infrastructure functionality (e.g., Bruneau (2003)).
-                                    This infrastructure has been the focus because of its traditional critical importance in supporting
-                                    everyday services.
-                                    However, if we focus on the outcomes that matter for communities, we can explore interventions that can
-                                    improve the resilience of communities, such as decentralization or infrastructure independence (e.g., solar panels or generators).
                                     '''],
                                     ),
                                     html.H6(
@@ -421,7 +414,7 @@ def create_layout(app):
                                         ['''
                                     This thinking of resilience is outcome-based.
                                     Where infrastructure has been the focus because of traditional engineering resilience approaches
-                                     - due to its critical importance in supporting everyday services -
+                                     (due to its critical importance in supporting everyday services) 
                                     we focus on the outcomes for communities.
                                     For instance we can explore interventions that can
                                     improve the resilience of communities, such as decentralization or infrastructure independence (e.g., solar panels or generators).
