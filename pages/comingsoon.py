@@ -5,19 +5,6 @@ from utils import Header, make_dash_table
 import pandas as pd
 import pathlib
 
-# get relative data folder
-PATH = pathlib.Path(__file__).parent
-DATA_PATH = PATH.joinpath("../data").resolve()
-
-
-df_current_prices = pd.read_csv(DATA_PATH.joinpath("df_current_prices.csv"))
-df_hist_prices = pd.read_csv(DATA_PATH.joinpath("df_hist_prices.csv"))
-df_avg_returns = pd.read_csv(DATA_PATH.joinpath("df_avg_returns.csv"))
-df_after_tax = pd.read_csv(DATA_PATH.joinpath("df_after_tax.csv"))
-df_recent_returns = pd.read_csv(DATA_PATH.joinpath("df_recent_returns.csv"))
-df_graph = pd.read_csv(DATA_PATH.joinpath("df_graph.csv"))
-
-
 
 def create_layout(app):
     # Page layouts

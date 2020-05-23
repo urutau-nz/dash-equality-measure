@@ -414,7 +414,7 @@ def create_layout(app):
                                         ['''
                                     This thinking of resilience is outcome-based.
                                     Where infrastructure has been the focus because of traditional engineering resilience approaches
-                                     (due to its critical importance in supporting everyday services) 
+                                     (due to its critical importance in supporting everyday services)
                                     we focus on the outcomes for communities.
                                     For instance we can explore interventions that can
                                     improve the resilience of communities, such as decentralization or infrastructure independence (e.g., solar panels or generators).
@@ -505,13 +505,10 @@ def create_layout(app):
                                 id="map-container",
                                     children=[
                                         html.H6("What is the state of people's access to services?"),
-                                        # build_graph_title("How has people's access to services changed?"),
                                         dcc.Graph(
                                             id="map",
                                             figure={
                                                 "layout": {
-                                                    # "paper_bgcolor": "#192444",
-                                                    # "plot_bgcolor": "#192444",
                                                 }
                                             },
                                             config={"scrollZoom": True, "displayModeBar": True,

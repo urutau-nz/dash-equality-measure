@@ -74,10 +74,7 @@ df_dist['distance'] = df_dist['distance'].replace(np.inf, 999)
 
 destinations = pd.read_csv('./data/destinations.csv')
 
-df_recovery = pd.read_csv('./data/recovery_nc.csv')
-
-
-
+df_recovery_nc = pd.read_csv('./data/recovery_nc.csv')
 
 # Update access map
 @app.callback(
@@ -168,7 +165,7 @@ def update_recovery(
     day = int(day)
 
     # subset data
-    dff_recovery = df_recovery[(df_recovery['service']==amenity_select)]
+    dff_recovery = df_recovery_nc[(df_recovery_nc['service']==amenity_select)]
 
     return resilience.recovery_plot(amenity_select, dff_recovery, day)
 
