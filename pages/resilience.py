@@ -360,59 +360,81 @@ def create_layout(app):
                         [
                             html.Div(
                                 [
-                                    html.P(
-                                        ["\
-                                    In ",
-                                    html.A("Logan & Guikema (2020)", href="https://onlinelibrary.wiley.com/doi/full/10.1111/risa.13492",
-                                        # style={'color':'white'}
-                                        ),
-                                    " we made the case for ''access to essential services'' being considered as a \
-                                    pillar of community resilience.\
-                                    This proposal is based on the works of many in the planning and resilience communities."
-                                    ],
+                                    dcc.Markdown(
+                                        ['''
+                                    In [Logan & Guikema (2020)](https://onlinelibrary.wiley.com/doi/full/10.1111/risa.13492)
+                                    we made the case for ''access to essential services'' being considered as a
+                                    pillar of community resilience.
+                                    '''],
                                     ),
                                     html.H6(
                                         ["Everyday services"], className="subtitle padded"
                                     ),
-                                    html.P(
-                                        ["\
-                                    In addition to water, power, sanitation, and communications, communities require\
-                                    access to everyday amenities including food, education, health care, and culture (Winter, 1997).\
-                                    While access includes dimensions of availability, acceptability, afforability, adequacy, and awareness (Penchasky 1981; Saurman 2016),\
-                                    we begin by considering proximity."
-                                    ],
+                                    dcc.Markdown(
+                                        ['''
+                                    The geography literature tells us that community cohesion, the generation of social
+                                    capital, and community sustainability is fostered by access to opportunities
+                                    and resources: specifically equitable access to those opportunities (Dempsey, 2011).
+                                    These everyday amenities include water, power, sanitation, and communications, but communities also require
+                                    access to food, education, and health care (Winter, 1997).
+                                    (While access includes dimensions of availability, acceptability, afforability, adequacy, and awareness (Penchasky 1981; Saurman 2016),
+                                    we begin by considering proximity.)"
+                                    '''],
                                     ),
                                     html.H6(
                                         ["Community capacity"], className="subtitle padded"
                                     ),
-                                    html.P(
-                                        ["\
-                                    For example, Talen (1998) points out that the equitable distribution of resources, that is access to services, is of utmost importance to planners.\
-                                    We have seen that communities without access to everyday services will simply collapse (Contreras, 2017).\
-                                    Further, we know that access, especially equitable access, is critical for community cohesion and social capital (Dempsey, 2011).\
-                                    These are characteristics integral to community resilience indicators such as those proposed by Cutter (2014) among others."
-                                    ],
+                                    dcc.Markdown(
+                                        ['''
+                                    Common to the many definitions of resilience is community capacity to anticipate, prepare, absorb,
+                                    adapt, and transform.
+                                    To develop these capacities, a community needs cohesion and social capital.
+                                    It is therefore necessary to ensure there is equitable access to essential services.
+                                    We have seen that communities without access to everyday services will simply collapse (Contreras, 2017).
+                                    That is, a community without resources and the trust that arises from equitable opportunities, will struggle
+                                    to develop the capacities identified as providing the foundation of resilience.
+                                    '''],
                                     ),
                                     html.H6(
-                                        ["Infrastructure functionality"], className="subtitle padded"
+                                        ["Functionality"], className="subtitle padded"
                                     ),
-                                    html.P(
-                                        ["\
-                                    Thinking about resilience in this manner, neatly ties in the works of the engineering resilience communities,\
-                                    who have focused primarily on infrastructure functionality (e.g., Bruneau (2003)).\
-                                    This infrastructure has been the focus because of its traditional critical importance in supporting\
-                                    everyday services.\
-                                    However, if we focus on the outcomes that matter for communities, we can explore interventions that can\
-                                    improve the resilience of communities, such as decentralization or infrastructure independence (e.g., solar panels or generators)."
-                                    ],
+                                    dcc.Markdown(
+                                        ['''
+                                    Resilience in terms of access not only supports the capacity for resilience prior to a disruption,
+                                    but supports decision making during a disaster.
+                                    At these times the focus of resilience shifts from the lens of capacity to that of functionality and impact.
+                                    Understanding how people's access has changed can enable emergency managers to quickly restore
+                                    the access that was lost and provide temporary access to those in-need.
+
+                                     , neatly ties in the works of the engineering resilience communities,
+                                    who have focused primarily on infrastructure functionality (e.g., Bruneau (2003)).
+                                    This infrastructure has been the focus because of its traditional critical importance in supporting
+                                    everyday services.
+                                    However, if we focus on the outcomes that matter for communities, we can explore interventions that can
+                                    improve the resilience of communities, such as decentralization or infrastructure independence (e.g., solar panels or generators).
+                                    '''],
+                                    ),
+                                    html.H6(
+                                        ["Outcome-centric"], className="subtitle padded"
+                                    ),
+                                    dcc.Markdown(
+                                        ['''
+                                    This thinking of resilience is outcome-based.
+                                    Where infrastructure has been the focus because of traditional engineering resilience approaches
+                                     - due to its critical importance in supporting everyday services -
+                                    we focus on the outcomes for communities.
+                                    For instance we can explore interventions that can
+                                    improve the resilience of communities, such as decentralization or infrastructure independence (e.g., solar panels or generators).
+                                    '''],
                                     ),
                                     html.H6(
                                         ["Spatial dimension"], className="subtitle padded"
                                     ),
                                     html.P(
                                         ["\
-                                    Finally, this conceptualization is spatially explicit, so resilience-enhancing decisions can be integrated into\
-                                    planning."
+                                    Finally, this conceptualization is spatially explicit, \
+                                    so resilience-enhancing decisions can be integrated into\
+                                    land-use planning and hazard exposure mapping."
                                     ],
                                     ),
                                     html.H6(
