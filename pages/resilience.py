@@ -378,7 +378,7 @@ def create_layout(app):
                                     These everyday amenities include water, power, sanitation, and communications, but communities also require
                                     access to food, education, and health care (Winter, 1997).
                                     (While access includes dimensions of availability, acceptability, afforability, adequacy, and awareness (Penchasky 1981; Saurman 2016),
-                                    we begin by considering proximity.)"
+                                    we begin by considering proximity.)
                                     '''],
                                     ),
                                     html.H6(
