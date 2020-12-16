@@ -41,7 +41,9 @@ app.layout = html.Div(
 def display_page(pathname):
     return equity.create_layout(app)
 
-
+cities_dict = {'baltimore':'bal','chicago':'chi','detroit':'det','seattle':'sea',
+            'portland':'por','denver':'den','miami':'mia','atlanta':'atl',
+            'new orleans':'new','houston':'hou'}
 #####
 # resilience
 #####
@@ -61,9 +63,9 @@ def update_map(
 ):
     x_range = None
     # import data
-    dff_dest = pd.read_csv('./data/destinations_bal.csv')
+    dff_dest = pd.read_csv('./data/destinations_{}.csv'.format(cities_dict[city_select]))
 
-    dist = pd.read_csv('./data/distance_bal.csv',dtype={"index": str})
+    dist = pd.read_csv('https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/distance_{}.csv'.format(cities_dict[city_select]),dtype={"geoid10": str})
     dist['supermarket'] = dist['supermarket']/1000
     dist['supermarket'] = dist['supermarket'].replace(np.inf, 999)
     # Find which one has been triggered

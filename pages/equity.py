@@ -15,10 +15,15 @@ cities_dict = {'baltimore':'bal','chicago':'chi','detroit':'det','seattle':'sea'
             'new orleans':'new','houston':'hou'}
 
 coords_dict = {'baltimore':[39.29501800942237, -76.61361529218145],
-                'chicago':'chi',
-                'detroit':'det','seattle':'sea',
-            'portland':'por','denver':'den','miami':'mia','atlanta':'atl',
-            'new orleans':'new','houston':'hou'}
+                'chicago':[41.89123222841393, -87.6390320153258],
+                'detroit':[42.36329239779258, -83.05763955915984],
+                'seattle':[47.62210492554877, -122.33311204447016],
+                'portland':[45.54298490069093, -122.62617044414516],
+                'denver':[39.73416049556091, -104.94989547947529],
+                'miami':[25.78389400341321, -80.18790937449846],
+                'atlanta':[33.75851606535921, -84.38662233121448],
+                'new orleans':[29.976447376710574, -90.03980386226647],
+                'houston':[29.747426745607235, -95.38089470787418]}
 
 pl_deep=[[0.0, 'rgb(253, 253, 204)'],
          [0.1, 'rgb(201, 235, 177)'],
@@ -455,6 +460,7 @@ def generate_map(city_select, dff_dist, dff_dest, x_range=None):
     dff_dist = dff_dist.reset_index()
     coord = coords_dict[city_select]
     block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/block_{}.geojson'.format(cities_dict[city_select])
+    print(block_data)
 
     layout = go.Layout(
         clickmode="none",
@@ -486,7 +492,7 @@ def generate_map(city_select, dff_dist, dff_dest, x_range=None):
     # choropleth map showing the distance at the block level
     data.append(go.Choroplethmapbox(
         geojson = block_data,
-        locations = dff_dist['index'].tolist(),
+        locations = dff_dist['geoid10'].tolist(),
         z = dff_dist['supermarket'].tolist(),
         colorscale = pl_deep,
         colorbar = dict(thickness=20, ticklen=3), zmin=0, zmax=5,
