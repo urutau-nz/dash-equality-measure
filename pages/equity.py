@@ -6,6 +6,7 @@ import plotly.express as px
 from utils import Header, make_dash_table
 import pandas as pd
 import numpy as np
+import inequalipy as ineq
 
 # mapbox token
 mapbox_access_token = open(".mapbox_token").read()
@@ -207,6 +208,16 @@ def create_layout(app):
                                             value=['H7X001',],
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
+                                        html.H6("If you'd like to examine or compare metrics, select"),
+                                        dcc.Checklist(
+                                            id="metrics-select-ecdf",
+                                            options=[
+                                                {'label': 'Mean', 'value': 'mean'},
+                                                {'label': 'Kolm-Pollak EDE (e=1)', 'value': 'ede'},
+                                            ],
+                                            value=[],
+                                            labelStyle={'display': 'inline-block', 'font-weight':400}
+                                        ),
                                         html.Div(
                                             id="ecdf-container",
                                             children=[
@@ -244,7 +255,7 @@ def create_layout(app):
                                             ),
                                         html.H6("Which metric should be used:"),
                                         dcc.RadioItems(
-                                            id="metric",
+                                            id="metric-select",
                                             options=[
                                                 {'label': 'Kolm-Pollak EDE', 'value': 'ede'},
                                                 {'label': 'Mean', 'value': 'mean'},
@@ -254,7 +265,15 @@ def create_layout(app):
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
                                         html.H6('If you selected Kolm-Pollak EDE, you can select the options below.'),
-                                        html.H6("Select the demographic groups"),
+                                        html.H6("1. Enter your inequality aversion parameter (should be negative, non-zero, as more distance is undesirable)"),
+                                        dcc.Input(
+                                            id='epsilon',
+                                            type='number',
+                                            value=-1,
+                                            max=-0.0001,
+                                            step=0.2,
+                                        ),
+                                        html.H6("2. Select the demographic groups"),
                                         dcc.Checklist(
                                             id="race-select-2",
                                             options=[
@@ -268,7 +287,7 @@ def create_layout(app):
                                             value=['H7X001','H7X002','H7X003'],
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
-                                        html.H6("Order by"),
+                                        html.H6("3. Order by"),
                                         dcc.RadioItems(
                                             id="race-order",
                                             options=[
@@ -342,7 +361,7 @@ def create_layout(app):
 
 race_dict = {'H7X001':'All', 'H7X002': 'White', 'H7X003':'Black', 'H7X004':'Am. Indian', 'H7X005':'Asian', 'H7Y003':'Hispanic'}
 
-def generate_ecdf_plot(dff_dist, race_select, cities_select):
+def generate_ecdf_plot(dff_dist, race_select, cities_select, metrics_select):
     """
     :param amenity_select: the amenity of interest.
     :return: Figure object
@@ -401,13 +420,31 @@ def generate_ecdf_plot(dff_dist, race_select, cities_select):
                     hovertemplate = "%{y:.0f}% of %{text} residents live within %{x:.1f}km <br>" + "<extra></extra>",
                     hoverlabel = dict(font_size=20),
                     )
+            # add lines
+            for metric in metrics_select:
+                if metric=='mean':
+                    val=np.average(df_plot.distance,weights=df_plot[group_select])
+                    ldash = 'dash'
+                else:
+                    val=ineq.kolmpollak.ede(df_plot.distance,weights=df_plot[group_select],epsilon=-1)
+                    ldash = 'dot'
+                new_line = go.Scatter(
+                    x=[val,val],
+                    y=[-10,110],
+                    line=dict(color=color,width=1, dash=ldash),
+                    mode='lines',
+                    name='{}, {}'.format(metric,race_dict[group_select]),
+                )
+                data.append(new_line)
+                print(data)
             j += 1
+
             data.append(new_trace)
 
     return {"data": data, "layout": layout}
 
 
-def generate_ranking_plot(dff_rank, race_select):
+def generate_ranking_plot(dff_rank, race_select, metric_select):
     """
     :param amenity_select: the amenity of interest.
     :return: Figure object
@@ -419,8 +456,8 @@ def generate_ranking_plot(dff_rank, race_select):
             ),
         yaxis=dict(
             title="EDE: distance (km)".upper(),
-            range=(0,5),
-            fixedrange=True,
+            range=(0,0.5) if metric_select == 'gini' else (0,5),
+            # fixedrange=True,
             titlefont=dict(size=12)
             ),
         font=dict(size=13),
@@ -456,11 +493,9 @@ def generate_map(city_select, dff_dist, dff_dest, x_range=None):
     :param x_range: distance range to highlight.
     :return: Plotly figure object.
     """
-    # print(dff_dist['geoid10'].tolist())
     dff_dist = dff_dist.reset_index()
     coord = coords_dict[city_select]
     block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/block_{}.geojson'.format(cities_dict[city_select])
-    print(block_data)
 
     layout = go.Layout(
         clickmode="none",
@@ -492,7 +527,7 @@ def generate_map(city_select, dff_dist, dff_dest, x_range=None):
     # choropleth map showing the distance at the block level
     data.append(go.Choroplethmapbox(
         geojson = block_data,
-        locations = dff_dist['geoid10'].tolist(),
+        locations = dff_dist['index'].tolist(),
         z = dff_dist['supermarket'].tolist(),
         colorscale = pl_deep,
         colorbar = dict(thickness=20, ticklen=3), zmin=0, zmax=5,
