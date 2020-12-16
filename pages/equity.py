@@ -10,6 +10,16 @@ import numpy as np
 # mapbox token
 mapbox_access_token = open(".mapbox_token").read()
 
+cities_dict = {'baltimore':'bal','chicago':'chi','detroit':'det','seattle':'sea',
+            'portland':'por','denver':'den','miami':'mia','atlanta':'atl',
+            'new orleans':'new','houston':'hou'}
+
+coords_dict = {'baltimore':[39.29501800942237, -76.61361529218145],
+                'chicago':'chi',
+                'detroit':'det','seattle':'sea',
+            'portland':'por','denver':'den','miami':'mia','atlanta':'atl',
+            'new orleans':'new','houston':'hou'}
+
 pl_deep=[[0.0, 'rgb(253, 253, 204)'],
          [0.1, 'rgb(201, 235, 177)'],
          [0.2, 'rgb(145, 216, 163)'],
@@ -443,16 +453,8 @@ def generate_map(city_select, dff_dist, dff_dest, x_range=None):
     """
     # print(dff_dist['geoid10'].tolist())
     dff_dist = dff_dist.reset_index()
-
-    if city_select == 'hamilton':
-        coord = [-37.786110, 175.277281]
-        block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-x-minute-city/master/data/block_ham.geojson'
-    elif city_select == 'baltimore':
-        coord = [34.24887, -77.935133]
-        block_data = './data/block_bal.geojson'
-    else:
-        coord = [34.24887, -77.935133]
-        block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-recovery-florence/master/data/block.geojson'
+    coord = coords_dict[city_select]
+    block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/block_{}.geojson'.format(cities_dict[city_select])
 
     layout = go.Layout(
         clickmode="none",
@@ -470,22 +472,22 @@ def generate_map(city_select, dff_dist, dff_dest, x_range=None):
             zoom=10.5,
             style="basic", #"dark", #
         ),
-        # legend=dict(
-        #     bgcolor="#1f2c56",
-        #     orientation="h",
-        #     font=dict(color="white"),
-        #     x=0,
-        #     y=0,
-        #     yanchor="top",
-        # ),
+        legend=dict(
+            bgcolor="#1f2c56",
+            orientation="h",
+            font=dict(color="white"),
+            x=0,
+            y=0,
+            yanchor="top",
+        ),
     )
 
     data = []
     # choropleth map showing the distance at the block level
     data.append(go.Choroplethmapbox(
         geojson = block_data,
-        locations = dff_dist['geoid10'].tolist(),
-        z = dff_dist['distance'].tolist(),
+        locations = dff_dist['index'].tolist(),
+        z = dff_dist['supermarket'].tolist(),
         colorscale = pl_deep,
         colorbar = dict(thickness=20, ticklen=3), zmin=0, zmax=5,
         marker_line_width=0, marker_opacity=0.7,

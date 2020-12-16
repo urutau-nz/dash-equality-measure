@@ -48,14 +48,6 @@ def display_page(pathname):
 # mapbox token
 mapbox_access_token = open(".mapbox_token").read()
 
-# Load data
-df_dist = pd.read_csv('./data/distance_to_nearest.csv',dtype={"geoid10": str})
-df_dist['distance'] = df_dist['distance']/1000
-df_dist['distance'] = df_dist['distance'].replace(np.inf, 999)
-
-destinations = pd.read_csv('./data/destinations.csv')
-
-df_recovery_nc = pd.read_csv('./data/recovery_nc.csv')
 
 # Update access map
 @app.callback(
@@ -68,9 +60,12 @@ def update_map(
     city_select
 ):
     x_range = None
-    # subset the desination df
-    dff_dest = destinations#[(destinations.city==city_select)]
-    dff_dist = df_dist#[(df_dist.city==city_select)]
+    # import data
+    dff_dest = pd.read_csv('./data/destinations_bal.csv')
+
+    dist = pd.read_csv('./data/distance_bal.csv',dtype={"index": str})
+    dist['supermarket'] = dist['supermarket']/1000
+    dist['supermarket'] = dist['supermarket'].replace(np.inf, 999)
     # Find which one has been triggered
     ctx = dash.callback_context
 
@@ -81,7 +76,7 @@ def update_map(
         prop_id = splitted[0]
         prop_type = splitted[1]
 
-    return equity.generate_map(city_select, dff_dist, dff_dest, x_range=x_range)
+    return equity.generate_map(city_select, dist, dff_dest, x_range=x_range)
 
 
 
