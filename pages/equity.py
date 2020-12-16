@@ -7,6 +7,20 @@ from utils import Header, make_dash_table
 import pandas as pd
 import numpy as np
 
+# mapbox token
+mapbox_access_token = open(".mapbox_token").read()
+
+pl_deep=[[0.0, 'rgb(253, 253, 204)'],
+         [0.1, 'rgb(201, 235, 177)'],
+         [0.2, 'rgb(145, 216, 163)'],
+         [0.3, 'rgb(102, 194, 163)'],
+         [0.4, 'rgb(81, 168, 162)'],
+         [0.5, 'rgb(72, 141, 157)'],
+         [0.6, 'rgb(64, 117, 152)'],
+         [0.7, 'rgb(61, 90, 146)'],
+         [0.8, 'rgb(65, 64, 123)'],
+         [0.9, 'rgb(55, 44, 80)'],
+         [1.0, 'rgb(39, 26, 44)']]
 
 
 def create_layout(app):
@@ -16,69 +30,11 @@ def create_layout(app):
             # page 3
             html.Div(
                 [
-                    # Buttons
-                    html.Div(
-                        [
-                            html.Div(
-                                [
-                                    html.A(
-                                        html.Button("Overview", id="learn-more-button"),
-                                        href="./overview",
-                                    ),
-                                    html.A(
-                                        html.Button("Resilience & Access", id="learn-more-button"),
-                                        href="./resilience",
-                                    ),
-                                    html.A(
-                                        html.Button("Measuring Equity", id="learn-more-button", className="current-button"),
-                                        # href="./resilience",
-                                    ),
-                                    html.A(
-                                        html.Button("Recover", id="learn-more-button"),
-                                        href="./recover",
-                                    ),
-                                    html.A(
-                                        html.Button("Transformation", id="learn-more-button"),
-                                        href="./transform",
-                                    ),
-                                ],
-                                className="twelve columns",
-                            ),
-                        ],
-                        className="row buttons",
-                        style={"margin-bottom": "35px"},
-                    ),
-                    # Title
-                    html.Div(
-                        [
-                            html.Div(
-                                [
-                                    html.H5("Measuring equality and equity"),
-                                ],
-                                className="product",
-                            )
-                        ],
-                        className="row",
-                    ),
                     # Row
                     html.Div(
                         [
                             html.Div(
                                 [
-                                    html.P(
-                                        ["\
-                                    In collaboration with ",
-                                    html.A("T Williams", href="http://tgwilliams.com/"),
-                                    " and ",
-                                    html.A("L Conrow,", href="https://www.canterbury.ac.nz/science/contact-us/people/lindsey-conrow.html"),
-                                    " we are demonstrating an approach to measure equality and equity\
-                                    that is suitable for urban planning contexts.\
-                                    This approach was proposed by Sheriff and Maguire (2013) as a means of evaluating the\
-                                    distribution of health risk across a population.\
-                                    For clarity, we refer to equality as homogeneity in resource distribution among recipients, whereas equity is distribution based on need.\
-                                    ",
-                                    ],
-                                    ),
                                     html.H6(
                                         ["Measuring equality and equity in urban planning"], className="subtitle padded"
                                     ),
@@ -119,23 +75,6 @@ def create_layout(app):
                                     '''],
                                     className="my_list"
                                     ),
-                                    html.H6(
-                                        ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
-                                    ),
-                                    html.P(
-                                        ["\
-                                    To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
-                                    We begin by calculating the network walking distance from every census-block to the nearest\
-                                    grocery store.\
-                                    We plot the distribution of access in the figure below.\
-                                    This shows what percentage of the population live within x-distance to their nearest store.\
-                                    In this figure, compare the different cities and demographic groups.\
-                                    We then calculate the Kolm-Pollak EDE so we have a single metric we can use to compare these groups (bottom figure).\
-                                    Note that this analysis is not possible with other equality indices because the Atkinson index is suited only for quantities of which you want more of (e.g., money, but not distance)\
-                                    and the Gini index is a relative measure of equality so it would say a city with no supermarkets is better because everyone is equally poorly off.\
-                                    "
-                                    ],
-                                    ),
                                 ],
                                 className="twelve columns",
                             ),
@@ -145,12 +84,85 @@ def create_layout(app):
                     # Row 2
                     html.Div(
                         [
+                            html.H6(
+                                ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
+                            ),
+                            html.P(
+                                ["\
+                            To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
+                            We begin by calculating the network walking distance from every census-block to the nearest\
+                            grocery store.\
+                            "
+                            ],
+                            ),
+                            html.Div(
+                                [
+                                    dcc.Dropdown(
+                                        id="city-select",
+                                        options=[
+                                            {'label': 'Baltimore', 'value': 'baltimore'},
+                                            {'label': 'Chicago', 'value': 'chicago'},
+                                            {'label': 'Detroit', 'value': 'detroit'},
+                                            {'label': 'Seattle', 'value': 'seattle'},
+                                            {'label': 'Portland', 'value': 'portland'},
+                                            {'label': 'Denver', 'value': 'denver'},
+                                            {'label': 'Miami', 'value': 'miami'},
+                                            {'label': 'Atlanta', 'value': 'atlanta'},
+                                            {'label': 'New Orleans', 'value': 'new orleans'},
+                                            {'label': 'Houston', 'value': 'houston'},
+                                        ],
+                                        multi=False,
+                                        value="baltimore"
+                                    ),
+                                ],
+                                # style={"overflow-x": "auto"},
+                            ),
+                            html.Div(
+                                id="map-container",
+                                    children=[
+                                        html.H6("What is the state of people's access to services?"),
+                                        dcc.Graph(
+                                            id="map",
+                                            figure={
+                                                "layout": {
+                                                }
+                                            },
+                                            config={"scrollZoom": True, "displayModeBar": True,
+                                                    "modeBarButtonsToRemove":["lasso2d","select2d"],
+                                            },
+                                        ),
+                                    ],
+                                className="twelve columns",
+                            ),
+                        ],
+                        className="row ",
+                    ),
+                    # Row 2
+                    html.Div(
+                        [
+                            html.H6(
+                                ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
+                            ),
+                            html.P(
+                                ["\
+                            To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
+                            We begin by calculating the network walking distance from every census-block to the nearest\
+                            grocery store.\
+                            We plot the distribution of access in the figure below.\
+                            This shows what percentage of the population live within x-distance to their nearest store.\
+                            In this figure, compare the different cities and demographic groups.\
+                            We then calculate the Kolm-Pollak EDE so we have a single metric we can use to compare these groups (bottom figure).\
+                            Note that this analysis is not possible with other equality indices because the Atkinson index is suited only for quantities of which you want more of (e.g., money, but not distance)\
+                            and the Gini index is a relative measure of equality so it would say a city with no supermarkets is better because everyone is equally poorly off.\
+                            "
+                            ],
+                            ),
                             html.Div(
                                     id="ecdf-container",
                                     children=[
                                         html.H6("Select the cities"),
                                         dcc.Dropdown(
-                                            id="city-select",
+                                            id="cities-select",
                                             options=[
                                                 {'label': 'Baltimore', 'value': 'baltimore'},
                                                 {'label': 'Chicago', 'value': 'chicago'},
@@ -179,29 +191,23 @@ def create_layout(app):
                                             ],
                                             value=['H7X001',],
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
-                                        )
+                                        ),
+                                        html.Div(
+                                            id="ecdf-container",
+                                            children=[
+                                                html.H6("How access to grocery stores is distributed across residents"),
+                                                dcc.Graph(id="food_ecdf",
+                                                config={"scrollZoom": True, "displayModeBar": True,
+                                                        "modeBarButtonsToRemove":['toggleSpikelines','hoverCompareCartesian',
+                                                        'pan',"zoomIn2d", "zoomOut2d","lasso2d","select2d"],
+                                                },
+                                            ),
+                                            ],
+                                            className=" twelve columns",
+                                        ),
                                     ],
                                 className="twelve columns",
                             )
-                        ],
-                        className="row ",
-                    ),
-                    # Row 3
-                    html.Div(
-                        [
-                            html.Div(
-                                id="ecdf-container",
-                                children=[
-                                    html.H6("How access to grocery stores is distributed across residents"),
-                                    dcc.Graph(id="food_ecdf",
-                                    config={"scrollZoom": True, "displayModeBar": True,
-                                            "modeBarButtonsToRemove":['toggleSpikelines','hoverCompareCartesian',
-                                            'pan',"zoomIn2d", "zoomOut2d","lasso2d","select2d"],
-                                    },
-                                ),
-                                ],
-                                className=" twelve columns",
-                            ),
                         ],
                         className="row ",
                     ),
@@ -209,18 +215,30 @@ def create_layout(app):
                     html.Div(
                         [
                             html.H6(
-                                ["Example: Ranking with the EDE"], className="subtitle padded"
+                                ["Comparisons and rankings"], className="subtitle padded"
                             ),
                             html.Div(
                                     id="ecdf-container",
                                     children=[
-                                        html.H6("Ranking cities based on access to grocery stores"),
+                                        html.H6("We can rank the cities based on access to grocery stores"),
                                         dcc.Graph(id="food_ranking",
                                         config={"scrollZoom": True, "displayModeBar": True,
                                                 "modeBarButtonsToRemove":['toggleSpikelines','hoverCompareCartesian',
                                                 'pan',"zoomIn2d", "zoomOut2d","lasso2d","select2d"],
                                                 },
                                             ),
+                                        html.H6("Which metric should be used:"),
+                                        dcc.RadioItems(
+                                            id="metric",
+                                            options=[
+                                                {'label': 'Kolm-Pollak EDE', 'value': 'ede'},
+                                                {'label': 'Mean', 'value': 'mean'},
+                                                {'label': 'Gini', 'value': 'gini'},
+                                            ],
+                                            value='ede',
+                                            labelStyle={'display': 'inline-block', 'font-weight':400}
+                                        ),
+                                        html.H6('If you selected Kolm-Pollak EDE, you can select the options below.'),
                                         html.H6("Select the demographic groups"),
                                         dcc.Checklist(
                                             id="race-select-2",
@@ -265,21 +283,35 @@ def create_layout(app):
                                         className="subtitle padded",
                                     ),
                                     html.P(
-                                        ["We are still working on this paper, but\
-                                        feel free to contact us if you have questions."
-                                        ]),
-                                    html.P(
-                                        ["Logan, T. M., Anderson, M. J., Williams, T., & Conrow, L. (In Progress). Measuring inequality in the built environment: Evaluating grocery store accessfor planning policy and intervention."],
+                                        ["Logan, T. M., Anderson, M. J., Williams, T., & Conrow, L. (Under review). Measuring inequalities in urban systems: An approach for evaluating the distribution of amenities and burdens. Computers, Environmental, and Urban Systems."],
                                         style={'padding-left': '22px', 'text-indent': '-22px', 'font-weight':400}
                                         ),
                                     html.P(
-                                        ["Information on the inequality measure can also be found here:"]
-                                        ),
-                                    html.P(
-                                        ["Sheriff, G., & Maguire, K. (2013). Ranking Distributions of Environmental Outcomes Across Population Groups. Working paper, EPA."
+                                        [
+                                        html.A(
+                                                "Sheriff, G., & Maguire, K. B. (2020). Health Risk, Inequality Indexes, and Environmental Justice. Risk Analysis: An Official Publication of the Society for Risk Analysis.",
+                                                href="https://doi.org/10.1111/risa.13562",
+                                                target='_blank'
+                                            )
                                         ],
                                         style={'padding-left': '22px', 'text-indent': '-22px', 'font-weight':400}
                                     ),
+                                    html.H6(
+                                        ["Python package"],
+                                        className="subtitle padded",
+                                    ),
+                                    html.P(
+                                        [
+                                        "This package lets you calculate the Kolm-Pollak, Atkinson, and Gini metrics for your data, in Python.",
+                                        html.Br(),
+                                        html.A(
+                                                "Inequalipy",
+                                                href="https://pypi.org/project/inequalipy/",
+                                                target='_blank'
+                                            )
+                                        ],
+                                        style={'padding-left': '22px', 'text-indent': '-22px', 'font-weight':400}
+                                        ),
                                 ],
                                 className=" twelve columns",
                             )
@@ -398,5 +430,78 @@ def generate_ranking_plot(dff_rank, race_select):
                 hoverlabel = dict(font_size=20),
                 )
         data.append(new_trace)
+
+    return {"data": data, "layout": layout}
+
+def generate_map(city_select, dff_dist, dff_dest, x_range=None):
+    """
+    Generate map showing the distance to services and the locations of them
+    :param amenity: the service of interest.
+    :param dff_dest: the lat and lons of the service.
+    :param x_range: distance range to highlight.
+    :return: Plotly figure object.
+    """
+    # print(dff_dist['geoid10'].tolist())
+    dff_dist = dff_dist.reset_index()
+
+    if city_select == 'hamilton':
+        coord = [-37.786110, 175.277281]
+        block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-x-minute-city/master/data/block_ham.geojson'
+    elif city_select == 'baltimore':
+        coord = [34.24887, -77.935133]
+        block_data = './data/block_bal.geojson'
+    else:
+        coord = [34.24887, -77.935133]
+        block_data = 'https://raw.githubusercontent.com/urutau-nz/dash-recovery-florence/master/data/block.geojson'
+
+    layout = go.Layout(
+        clickmode="none",
+        dragmode="zoom",
+        showlegend=True,
+        autosize=True,
+        hovermode="closest",
+        margin=dict(l=0, r=0, t=0, b=0),
+        # height= 561,
+        mapbox=go.layout.Mapbox(
+            accesstoken=mapbox_access_token,
+            bearing=0,
+            center=go.layout.mapbox.Center(lat = coord[0], lon = coord[1]),
+            pitch=0,
+            zoom=10.5,
+            style="basic", #"dark", #
+        ),
+        # legend=dict(
+        #     bgcolor="#1f2c56",
+        #     orientation="h",
+        #     font=dict(color="white"),
+        #     x=0,
+        #     y=0,
+        #     yanchor="top",
+        # ),
+    )
+
+    data = []
+    # choropleth map showing the distance at the block level
+    data.append(go.Choroplethmapbox(
+        geojson = block_data,
+        locations = dff_dist['geoid10'].tolist(),
+        z = dff_dist['distance'].tolist(),
+        colorscale = pl_deep,
+        colorbar = dict(thickness=20, ticklen=3), zmin=0, zmax=5,
+        marker_line_width=0, marker_opacity=0.7,
+        visible=True,
+        hovertemplate="Distance: %{z:.2f}km<br>" +
+                        "<extra></extra>",
+    ))
+
+    data.append(go.Scattermapbox(
+        lat=dff_dest["lat"],
+        lon=dff_dest["lon"],
+        mode="markers",
+        marker={"color": ['#EA5138']*len(dff_dest), "size": 9},
+        name='supermarket',
+        hoverinfo="skip", hovertemplate="",
+    ))
+
 
     return {"data": data, "layout": layout}

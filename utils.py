@@ -3,7 +3,9 @@ import dash_core_components as dcc
 
 
 def Header(app):
-    return html.Div([get_header(app), html.Br([]), get_menu()])
+    return html.Div([get_header(app), html.Br([])])
+    
+
 
 
 def get_header(app):
@@ -27,7 +29,7 @@ def get_header(app):
             html.Div(
                 [
                     html.Div(
-                        [html.H5("Embedding equity into community resilience through data-driven urban planning")],
+                        [html.H5("Measuring inequality in urban systems: An approach for evaluating thedistribution of amenities and burdens")],
                         className="nine columns main-title",
                     ),
                     # html.Div(
