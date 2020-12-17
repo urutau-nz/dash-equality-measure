@@ -8,8 +8,6 @@ import inequalipy as ineq
 import numpy as np
 from urllib.request import urlopen
 import json
-import geopandas as gpd
-import datetime
 
 from pages import (
     # overview,
@@ -196,4 +194,4 @@ def update_rank(
 
 if __name__ == "__main__":
     # app.run_server(debug=True)
-    app.run_server(port=9010)
+    app.run_server(port=9010, debug=True)
