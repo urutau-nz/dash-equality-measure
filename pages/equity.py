@@ -98,61 +98,61 @@ def create_layout(app):
                         className="row ",
                     ),
                     # Row 2
-                    # html.Div(
-                    #     [
-                    #         html.H6(
-                    #             ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
-                    #         ),
-                    #         html.P(
-                    #             ["\
-                    #         To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
-                    #         We begin by calculating the network walking distance from every census-block to the nearest\
-                    #         grocery store.\
-                    #         "
-                    #         ],
-                    #         ),
-                    #         html.Div(
-                    #             [
-                    #                 dcc.Dropdown(
-                    #                     id="city-select",
-                    #                     options=[
-                    #                         {'label': 'Baltimore', 'value': 'baltimore'},
-                    #                         {'label': 'Chicago', 'value': 'chicago'},
-                    #                         {'label': 'Detroit', 'value': 'detroit'},
-                    #                         {'label': 'Seattle', 'value': 'seattle'},
-                    #                         {'label': 'Portland', 'value': 'portland'},
-                    #                         {'label': 'Denver', 'value': 'denver'},
-                    #                         {'label': 'Miami', 'value': 'miami'},
-                    #                         {'label': 'Atlanta', 'value': 'atlanta'},
-                    #                         {'label': 'New Orleans', 'value': 'new orleans'},
-                    #                         {'label': 'Houston', 'value': 'houston'},
-                    #                     ],
-                    #                     multi=False,
-                    #                     value="baltimore"
-                    #                 ),
-                    #             ],
-                    #             # style={"overflow-x": "auto"},
-                    #         ),
-                    #         html.Div(
-                    #             id="map-container",
-                    #                 children=[
-                    #                     html.H6("What is the state of people's access to services?"),
-                    #                     dcc.Graph(
-                    #                         id="map",
-                    #                         figure={
-                    #                             "layout": {
-                    #                             }
-                    #                         },
-                    #                         config={"scrollZoom": True, "displayModeBar": True,
-                    #                                 "modeBarButtonsToRemove":["lasso2d","select2d"],
-                    #                         },
-                    #                     ),
-                    #                 ],
-                    #             className="twelve columns",
-                    #         ),
-                    #     ],
-                    #     className="row ",
-                    # ),
+                    html.Div(
+                        [
+                            html.H6(
+                                ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
+                            ),
+                            html.P(
+                                ["\
+                            To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
+                            We begin by calculating the network walking distance from every census-block to the nearest\
+                            grocery store.\
+                            "
+                            ],
+                            ),
+                            html.Div(
+                                [
+                                    dcc.Dropdown(
+                                        id="city-select",
+                                        options=[
+                                            # {'label': 'Baltimore', 'value': 'baltimore'},
+                                            # {'label': 'Chicago', 'value': 'chicago'},
+                                            # {'label': 'Detroit', 'value': 'detroit'},
+                                            {'label': 'Seattle', 'value': 'seattle'},
+                                            # {'label': 'Portland', 'value': 'portland'},
+                                            # {'label': 'Denver', 'value': 'denver'},
+                                            # {'label': 'Miami', 'value': 'miami'},
+                                            # {'label': 'Atlanta', 'value': 'atlanta'},
+                                            {'label': 'New Orleans', 'value': 'new orleans'},
+                                            # {'label': 'Houston', 'value': 'houston'},
+                                        ],
+                                        multi=False,
+                                        value="new orleans"
+                                    ),
+                                ],
+                                # style={"overflow-x": "auto"},
+                            ),
+                            html.Div(
+                                id="map-container",
+                                    children=[
+                                        html.H6("What is the state of people's access to services?"),
+                                        dcc.Graph(
+                                            id="map",
+                                            figure={
+                                                "layout": {
+                                                }
+                                            },
+                                            config={"scrollZoom": True, "displayModeBar": True,
+                                                    "modeBarButtonsToRemove":["lasso2d","select2d"],
+                                            },
+                                        ),
+                                    ],
+                                className="twelve columns",
+                            ),
+                        ],
+                        className="row ",
+                    ),
                     # Row 2
                     html.Div(
                         [
