@@ -101,7 +101,7 @@ def create_layout(app):
                     # Row 2
                     html.Div(
                         [html.H5("Example: Food deserts in the USA")],
-                        className="twelve columns main-title",
+                        className="nine columns main-title",
                     ),
                     html.Div(
                         [
@@ -318,7 +318,7 @@ def create_layout(app):
                                         "
                                         ],
                                         ),
-                                        html.H6("1. Enter your inequality aversion parameter (should be negative, non-zero, as more distance is undesirable)"),
+                                        html.H6("Enter your inequality aversion parameter (should be negative, non-zero, as more distance is undesirable)"),
                                         dcc.Input(
                                             id='epsilon',
                                             type='number',
