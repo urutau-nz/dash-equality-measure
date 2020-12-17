@@ -61,7 +61,7 @@ def update_map(
 ):
     x_range = None
     # import data
-    dff_dest = pd.read_csv('./data/destinations_{}.csv'.format(cities_dict[city_select]))
+    dff_dest = pd.read_csv('https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/destinations_{}.csv'.format(cities_dict[city_select]))
 
     dist = pd.read_csv('https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/distance_{}.csv'.format(cities_dict[city_select]),dtype={"index": str})
     dist['supermarket'] = dist['supermarket']/1000
@@ -84,7 +84,7 @@ def update_map(
 # Equity
 #####
 # Load data
-df_dist_grocery = pd.read_csv('./data/supermarket_distance.csv')
+df_dist_grocery = pd.read_csv('https://raw.githubusercontent.com/urutau-nz/dash-equality-measure/master/data/supermarket_distance.csv')
 df_dist_grocery['distance'] = df_dist_grocery['distance']/1000
 df_dist_grocery['distance'] = df_dist_grocery['distance'].replace(np.inf, 999)
 
