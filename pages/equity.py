@@ -52,26 +52,27 @@ def create_layout(app):
                             html.Div(
                                 [
                                     html.H6(
-                                        ["Measuring equality and equity in urban planning"], className="subtitle padded"
+                                        ["Equality in urban systems"], className="subtitle padded"
                                     ),
                                     dcc.Markdown(
                                         ['''
-                                    One major approach to evaluate equity in urban planning is equity mapping.
-                                    While mapping is essential for communicating to decision-makers, there are occassions where
-                                    quantifying a distribution and its equality with a single value would be useful.
-                                    Such cases include 1) ranking of interventions or regions,\
-                                    2) regression analysis, 3) optimization, 4) and enhancing resilience.
+                                    How our urban environments are designed has major implications for how burdens and resources are distributed
+                                    amongst residents:
+                                    access to healthy food, exposure to hazards, the amount of greenspace, or the ease of active transport.
+                                    How these resources and burdens are distributed impacts equity.
+                                    As our cities change, it is important that we can evaluate potential interventions if we are to pursue equitable cities.
                                     '''],
                                     ),
                                     html.H6(
-                                        ["Evaluating a distribution"], className="subtitle padded"
+                                        ["Limitations of existing equality measures"], className="subtitle padded"
                                     ),
                                     dcc.Markdown(
                                         ['''
-                                    Existing approaches to evaluate a distribution include the average value and percentage of population within a threshold.
-                                    These approaches essentially ignore the residents who are worst-off.
-                                    Therefore we need a measure that captures the inequality.
-                                    Such measures include the Gini Index, the Atkinson Index, and the recently proposed Kolm-Pollak "EDE" (Sheriff, 2013).
+                                    The quantities of interest in urban systems could be both desirable (resources) and undesirable (burdens).
+                                    For example, the extent of tree canopy is often considered desirable - i.e., more canopy cover is better.
+                                    Whereas exposure to air pollution is undesirable - less is better.
+                                    This has implications for the equality measure, as existing measures were designed for income equality (a desirable quantity).
+                                    Additionally, not all equality measures can be separated by subgroup; this is essential for us to evaluate subgroups based on need, enabling us to consider equity.
                                     '''],
                                     ),
                                     html.H6(
@@ -99,17 +100,22 @@ def create_layout(app):
                     ),
                     # Row 2
                     html.Div(
+                        [html.H5("Example: Food deserts in the USA")],
+                        className="twelve columns main-title",
+                    ),
+                    html.Div(
                         [
-                            html.H6(
-                                ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
-                            ),
                             html.P(
                                 ["\
-                            To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
+                            To illustrate using the Kolm-Pollak EDE approach, we will evaluate grocery store access in ten USA cities.\
                             We begin by calculating the network walking distance from every census-block to the nearest\
                             grocery store.\
+                            Because our quantity is *distance*, it is undesirable as (generally) it is preferable to live closer to healthy food outlets.\
                             "
                             ],
+                            ),
+                            html.H6(
+                                ["The spatial distribution of grocery stores in two US cities"], className="subtitle padded"
                             ),
                             html.Div(
                                 [
@@ -157,19 +163,16 @@ def create_layout(app):
                     html.Div(
                         [
                             html.H6(
-                                ["Example: Evaluating grocery store access in ten USA cities"], className="subtitle padded"
+                                ["How that distance is distributed between residents"], className="subtitle padded"
                             ),
                             html.P(
                                 ["\
-                            To illustrate using the K-P approach, we will evaluate grocery store access in ten USA cities.\
-                            We begin by calculating the network walking distance from every census-block to the nearest\
-                            grocery store.\
+                            Inequality measures are measures of statistical distributions.\
                             We plot the distribution of access in the figure below.\
                             This shows what percentage of the population live within x-distance to their nearest store.\
                             In this figure, compare the different cities and demographic groups.\
-                            We then calculate the Kolm-Pollak EDE so we have a single metric we can use to compare these groups (bottom figure).\
-                            Note that this analysis is not possible with other equality indices because the Atkinson index is suited only for quantities of which you want more of (e.g., money, but not distance)\
-                            and the Gini index is a relative measure of equality so it would say a city with no supermarkets is better because everyone is equally poorly off.\
+                            \
+                            Here you can also see how the EDE is close to the mean (average), but penalized for the inequality.\
                             "
                             ],
                             ),
@@ -243,6 +246,16 @@ def create_layout(app):
                             html.H6(
                                 ["Comparisons and rankings"], className="subtitle padded"
                             ),
+                            html.P(
+                                ["\
+                            One of the values of a metric such as this is so we can compare options or scenarios.\
+                            This figure shows which cities provide the best proximity of grocery stores for their residents.\
+                            We can see how this access changes by demographic group.\
+                            \
+                            In this figure you can also compare the mean and Gini index. Although these measures are limited in their use for these applications.\
+                            "
+                            ],
+                            ),
                             html.Div(
                                     id="ecdf-container",
                                     children=[
@@ -265,15 +278,7 @@ def create_layout(app):
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
                                         html.H6('If you selected Kolm-Pollak EDE, you can select the options below.'),
-                                        html.H6("1. Enter your inequality aversion parameter (should be negative, non-zero, as more distance is undesirable)"),
-                                        dcc.Input(
-                                            id='epsilon',
-                                            type='number',
-                                            value=-1,
-                                            max=-0.0001,
-                                            step=0.2,
-                                        ),
-                                        html.H6("2. Select the demographic groups"),
+                                        html.H6("1. Select the demographic groups"),
                                         dcc.Checklist(
                                             id="race-select-2",
                                             options=[
@@ -287,7 +292,7 @@ def create_layout(app):
                                             value=['H7X001','H7X002','H7X003'],
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
                                         ),
-                                        html.H6("3. Order by"),
+                                        html.H6("2. Order by"),
                                         dcc.RadioItems(
                                             id="race-order",
                                             options=[
@@ -300,6 +305,26 @@ def create_layout(app):
                                             ],
                                             value='H7X001',
                                             labelStyle={'display': 'inline-block', 'font-weight':400}
+                                        ),
+                                        html.H6(
+                                            ["Aversion to inequality parameter"], className="subtitle padded"
+                                        ),
+                                        html.P(
+                                            ["\
+                                        Equity is subjective in the sense that it is based on the values of a community.\
+                                        The Kolm-Pollak measure is dependent on a user-defined inequality aversion parameter.\
+                                        \
+                                        With this box, you can explore how the EDE in the above figure is sensitive to the equality aversion parameter.\
+                                        "
+                                        ],
+                                        ),
+                                        html.H6("1. Enter your inequality aversion parameter (should be negative, non-zero, as more distance is undesirable)"),
+                                        dcc.Input(
+                                            id='epsilon',
+                                            type='number',
+                                            value=-1,
+                                            max=-0.0001,
+                                            step=0.2,
                                         ),
                                     ],
                                 className="twelve columns",
