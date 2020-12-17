@@ -101,7 +101,7 @@ def create_layout(app):
                     # Row 2
                     html.Div(
                         [html.H5("Example: Food deserts in the USA")],
-                        className="nine columns main-title",
+                        className="twelve columns main-title",
                     ),
                     html.Div(
                         [
